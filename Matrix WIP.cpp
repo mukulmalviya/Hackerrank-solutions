@@ -8,6 +8,7 @@ vector<string> split(const string &);
 
 // Complete the matrixRotation function below.
 
+   
 
 
 void matrixRotation(vector<vector<int>> matrix, int r) {
@@ -19,7 +20,12 @@ void matrixRotation(vector<vector<int>> matrix, int r) {
     int nub = coloumns-1;
     vector<int> ring;
     vector<int> buffer;
+    int bufiter = r;
+    int ringindex = 0;
+     
     
+    while((mub-mlb)/2>=0 || (nub-nlb)/2>=0)
+    {
     for(int a=nlb;a<=nub;a++)
     {
         ring.push_back(matrix[mlb][a]);
@@ -28,7 +34,7 @@ void matrixRotation(vector<vector<int>> matrix, int r) {
     {
         ring.push_back(matrix[b][nub]);
     }
-    for(int c=nub;c>=nlb;c--)
+    for(int c=nub-1;c>=nlb;c--)
     {
         ring.push_back(matrix[mub][c]);
     }
@@ -37,18 +43,81 @@ void matrixRotation(vector<vector<int>> matrix, int r) {
         ring.push_back(matrix[d][nlb]);
     }
     
+    int siz = ring.size();
+    
     for(int w=0;w<r;w++)
     {
-        buffer.push_back(ring[w]);
-    }
-    for(int e=0;e<ring.size();e++)
+        if(w<siz)
+        {
+            buffer.push_back(ring[w]);
+        }
+    } 
+    
+    for(int e=0;e<siz;e++)
     {
-        if((e+r)<ring.size())
+        if((e+r)<siz)
             ring[e] = ring[e+r];
         else
-            ring[e] = buffer[e-ring.size()];
+        {
+            ring[e] = buffer[r-bufiter];
+            bufiter--;
+        }
     }
+    
+    //debug
+    cout<<endl;
+     for(int o=0;o<siz;o++)  // loop for the three elements on the line
+        {
+            cout<<ring[o]<<" ";  // display the current element out of the array
+        }
+    cout<<endl;
+    
+    
     //copy it back to matrix
+     for(int a=nlb;a<=nub;a++)
+    {
+        matrix[mlb][a] = ring[ringindex];
+        ringindex++;
+        //ring.push_back(matrix[mlb][a]);
+    }
+    for(int b=mlb+1;b<=mub;b++)
+    {
+        matrix[b][nub] = ring[ringindex];
+        ringindex++;
+        //ring.push_back(matrix[b][nub]);
+    }
+    for(int c=nub-1;c>=nlb;c--)
+    {
+        matrix[mub][c] = ring[ringindex];
+        ringindex++;
+        //ring.push_back(matrix[mub][c]);
+    }
+    for(int d=mub-1;d>=mlb+1;d--)
+    {
+        matrix[d][nlb] = ring[ringindex];
+        ringindex++;
+        //ring.push_back(matrix[d][nlb]);
+    }
+    
+    mlb++;
+    nlb++;
+    mub--;
+    nub--;
+    bufiter = r;
+    ringindex = 0;
+    ring.clear();
+    buffer.clear();
+    }
+    //print matrix
+    for(int x=0;x<rows;x++)  // loop 3 times for three lines
+    {
+        for(int y=0;y<coloumns;y++)  // loop for the three elements on the line
+        {
+            cout<<matrix[x][y]<<" ";  // display the current element out of the array
+        }
+    cout<<endl;  // when the inner loop is done, go to a new line
+    }
+   
     
     /*for(int q=0;q<ring.size();q++)
         cout<<ring[q]<<endl;
